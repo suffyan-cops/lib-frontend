@@ -18,7 +18,6 @@ const AddRequest : React.FC<AddRequestProps> = ({setAddRequestRecord,addRequestR
         const { name, value } = e.target;
         if(name === "user_id") {
             setBooks([])
-            console.log(value,"valuevalue")
             fetchBookAgainstReader(value)
         }
         setAddRequestRecord((prevData : AddRequestPropsData) => ({
@@ -35,7 +34,6 @@ const AddRequest : React.FC<AddRequestProps> = ({setAddRequestRecord,addRequestR
     const fetchBookAgainstReader = async (readerId : number | string) => {
         try {
             const response = await getCall(endPoints?.getBooksAgainstUserLibrary, {id :readerId});
-                console.log(response,"response book after user selected")
                 if(response?.length ==0){
                     toast.info("No books found against this reader");
                     return

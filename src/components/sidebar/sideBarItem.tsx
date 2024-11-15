@@ -19,12 +19,10 @@ const SideBarItem = ({ item }: any) => {
     const navigate = useNavigate();
     const [logoutUsers, setLogoutUser] = useState(false);
     const handleLogout = () => {
-        console.log("Logout clicked");
         setLogoutUser((prev) => !prev)
     }
 
     const confirmLogout = async () => {
-        console.log("Logout confirmed");
         try{
             const response = await axios.delete(`${baseUrl}/${endPoints.logout}`, {
                 headers: {

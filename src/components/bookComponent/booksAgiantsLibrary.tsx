@@ -4,30 +4,14 @@ import { getCall } from "../../services/crudServices";
 import { useEffect, useState } from "react";
 
 const BooksAgainstLibrary = ({ library }) => {
-    console.log(library,"library_id")
     const [books, setBooks] = useState([]);
     useEffect(()=>{
         fetchBooksAgainstLib();
-    },[library?.id])
+    },[])
     const fetchBooksAgainstLib = async () => {
-        console.log("fetchBooksAgainstLib", library?.id)
         try {
             const response = await getCall(endPoints.getBooksAgainstLibrary, {library_id:library?.id});
             setBooks(response);
-            console.log(response, "books against library")
-            // if (response.status === 200) {
-            //     toast.success(`${response?.data?.message}`);
-            //     setEditBookRecord(false)
-            //     setEditBookData({
-            //         title: "",
-            //         description: "",
-            //         publication_year: "",
-            //         quantity: "",
-            //         library_id: ""
-            //     })
-            //     dispatch(changeModalState(false))
-            //     fetchBooks();
-            // }
         } catch (error) {
             console.error(error);
             toast.error(`${error?.message}`)

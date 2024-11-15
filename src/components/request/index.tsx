@@ -38,7 +38,6 @@ const RequestList = ()=>{
     const fetchRequests = async () => {
         try {
             const response = await getCall(endPoints.getRequestList);
-            console.log(response, "requests");
             setRequest(response);
         } catch (error) {
             console.error(error);
@@ -47,14 +46,10 @@ const RequestList = ()=>{
     }
 
     const handleKeyPress = async (event) => {
-        console.log("Keyys")
-        const status = ['Submitted','Completed', 'Rejected' ];
-
 
         if (event.key === 'Enter') {  
             try {
                 const response = await getCall(endPoints.searchRequestByStatus, {searchValue : searchValue});
-                console.log(response,"filter")
                 if(response?.length > 0)
                 {
                     setRequest(response);
@@ -92,10 +87,8 @@ const RequestList = ()=>{
     }
 
     const saveEditRecord = async () => {
-        console.log(editRequestData,"editRequestDataeditRequestDataeditRequestData")
         try {
             const response = await putCall(endPoints.updateRequest, editRequestData);
-            console.log("edited Data", response);
             if (response.status === 200) {
                 toast.success(`${response?.data?.message}`);
                 setEditRequestRecord(false)
@@ -153,7 +146,6 @@ const RequestList = ()=>{
             }
         try {
             const result = await postCall(endPoints.addRequest,addRequestRecord);
-            console.log(result,"result")
             if (result.status === 200) {
                 toast.success(`${result?.data?.message}`);
                 setAddRequestRecord({

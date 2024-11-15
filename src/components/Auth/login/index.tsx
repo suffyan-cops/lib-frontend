@@ -50,7 +50,6 @@ const LoginComponent = () => {
                     ...result?.data?.data,
                     jwtToken: token.split('Bearer')[1]?.trim() || ''
                 };
-                console.log(userData,"userDatauserData")
                 setCookie('jwt', token);
                 toast.success(`${result?.data?.message}`)
                 dispatch(loginUser(userData))

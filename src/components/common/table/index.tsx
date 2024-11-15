@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { getLocalStorageItem } from '../../../services/localStorageItem';
 import './custom.css'
 import BooksAgainstLibrary from '../../bookComponent/booksAgiantsLibrary';
+import FetchBooksWithReturnDate from '../../bookComponent/fetchBooksAgainsstRequest';
 
 
 const Table = ({ header, data, placeholder, handleDeleteRecord, handelEditRecord, setSearchValue, searchValue, isRole, handleKeyPress, indexName }) => {
@@ -85,6 +86,7 @@ const Table = ({ header, data, placeholder, handleDeleteRecord, handelEditRecord
                   <td colSpan={header.length} className="p-2 bg-secondary border border-primary transition-all duration-300">
                     <div className="transition-all duration-300">
                       {indexName==='library' && role==='super_admin'? (<BooksAgainstLibrary library={row}/>) : 
+                      indexName==='book' && (role==='super_admin' || role==='librarian') ? (<FetchBooksWithReturnDate book={row}/>)  :
                       <>
                        <div>
                        <span className="font-semibold text-gray-800">

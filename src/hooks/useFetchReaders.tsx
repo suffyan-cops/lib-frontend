@@ -13,7 +13,6 @@ export const useFetchReaders = () => {
       const fetchLibraries = async () => {
         try {
           const response = await getCall(endPoints.getReadersList);
-          console.log(response,"readers response")
           setReaders(response);
         } catch (err) {
           toast.error(`${err?.response?.data?.error || "Failed to fetch Readers"}`);

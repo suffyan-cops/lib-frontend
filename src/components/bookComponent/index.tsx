@@ -38,7 +38,6 @@ const BookList = () => {
     const fetchBooks = async () => {
         try {
             const response = await getCall(endPoints.fetchAllBooks);
-            console.log(response)
             setBook(response);
         } catch (error) {
             console.error(error);
@@ -50,7 +49,6 @@ const BookList = () => {
         if (event.key === 'Enter') {  
             try {
                 const response = await getCall(endPoints.searchBookByTitle, {searchValue : searchValue});
-                console.log(response,"filter")
                 if(response?.length > 0)
                 {
                     setBook(response);
@@ -142,7 +140,6 @@ const BookList = () => {
         }
         try {
             const result = await postCall(endPoints.addBook, addBookData);
-            console.log(result, "Book added")
             if (result.status === 200) {
                 toast.success(`${result?.data?.message}`);
                 setAddBookData({
@@ -172,7 +169,7 @@ const BookList = () => {
     return (
         <>
             <div className="flex flex-col justify-center items-center  ">
-                <Table data={books} header={headers} placeholder="Book Name" handleDeleteRecord={handleDeleteRecord} handelEditRecord={handelEditRecord} isRole={role} setSearchValue={setSearchValue} searchValue={searchValue} handleKeyPress={handleKeyPress} />
+                <Table data={books} header={headers} placeholder="Book Name" handleDeleteRecord={handleDeleteRecord} handelEditRecord={handelEditRecord} isRole={role} setSearchValue={setSearchValue} searchValue={searchValue} handleKeyPress={handleKeyPress} indexName='book' />
                 {
                     modalValue &&
                     <ModalComponent

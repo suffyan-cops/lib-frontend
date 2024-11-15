@@ -60,11 +60,9 @@ const MemberList = () => {
 
 
     const handleKeyPress = async (event) => {
-        console.log("Keyys")
         if (event.key === 'Enter') {
             try {
                 const response = await getCall(endPoints.searchMemberByName, {searchValue : searchValue});
-                console.log(response,"filter")
                 if(response?.length > 0)
                 {
                     setMembers(response);
@@ -193,8 +191,6 @@ const MemberList = () => {
             handleAddRecord();
         }
     }
-
-    console.log(editMemberRecord,"editMemberRecordeditMemberRecord")
     return (
         <>
         <div className="flex flex-col justify-center items-center  ">

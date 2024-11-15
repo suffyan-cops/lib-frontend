@@ -46,11 +46,9 @@ const UserList = () => {
     }
 
     const handleKeyPress = async (event) => {
-        console.log("Keyys")
         if (event.key === 'Enter') {
             try {
                 const response = await getCall(endPoints.searchUserByName, {searchValue : searchValue});
-                console.log(response,"filter")
                 if(response?.length > 0)
                 {
                     setUsers(response);

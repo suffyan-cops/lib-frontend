@@ -5,11 +5,11 @@ import { getLocalStorageItem } from "../services/localStorageItem/index.ts"
 
 interface LayoutInterface {
     children: React.ReactNode,
-    name:string
+    name: string
 }
 
 const Layout = (props: LayoutInterface) => {
-    const role=getLocalStorageItem('role');
+    const role = getLocalStorageItem('role');
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
@@ -41,11 +41,11 @@ const Layout = (props: LayoutInterface) => {
                     <div className="relative flex flex-1 flex-col lg:ml-72.5 pt-10">
                         {props.children}
                     </div>
-                </div>  
+                </div>
                 {!(props.name === "dashboard" || (props.name === "book" && role === "reader")) && (
-  <PlusIcon />
-)}
-              
+                    <PlusIcon />
+                )}
+
             </div>
         </>
     )

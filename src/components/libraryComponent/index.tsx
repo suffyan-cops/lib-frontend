@@ -48,24 +48,10 @@ const LibraryList = () => {
         }
     }
 
-    // useEffect(() => {
-    //     if (searchValue) {
-    //         const searchResult = libraries?.filter((item) =>
-    //             item?.name.toLowerCase().includes(searchValue.toLowerCase())
-    //         );
-    //         setLibraries(searchResult);
-    //     } else {
-    //         setLibraries(originalLibraries);
-    //     }
-    // }, [searchValue, originalLibraries]);
-
-
     const handleKeyPress = async (event) => {
-        console.log("Keyys")
         if (event.key === 'Enter') {  
             try {
                 const response = await getCall(endPoints.searchValueLibrary, {searchValue : searchValue});
-                console.log(response,"filter")
                 if(response?.length > 0)
                 {
                     setLibraries(response);
@@ -85,8 +71,6 @@ const LibraryList = () => {
     const handleDeleteRecord = async (row: any) => {
         try {
             const result = await deletecall(endPoints.deleteLibrary, row);
-
-            console.log(result, "deleted Result")
             if (result.status === 200) {
                 toast.success(`${result?.data?.message}`);
                 fetchLibraries();
@@ -130,7 +114,6 @@ const LibraryList = () => {
             }
             try {
                 const response = await putCall(endPoints.updateLibrary, editLibraryData);
-                console.log(response, "edit Library Response");
                 if (response.status === 200) {
                     toast.success(`${response?.data?.message}`);
                     setEditLibraryRecord(false)
@@ -150,7 +133,6 @@ const LibraryList = () => {
                     return;
                 }
                 const response = await postCall(endPoints.addLibrary, addLibraryData);
-                console.log(response, "library Response");
                 if (response.status === 200) {
                     toast.success(`${response?.data?.message}`);
                     setAddLibraryData({

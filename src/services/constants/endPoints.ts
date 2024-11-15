@@ -36,6 +36,7 @@ export const endPoints ={
     availableBooksCount : '/api/v1/book/fetchAvailableBooksCount',
     libraryCount : '/api/v1/library/fetchLibCount',
     getBooksAgainstLibrary : '/api/v1/book/get_books_by_library_id',
+    fetchBooksWithReturnDate : '/api/v1/book/fetchBooksWithReturnDate'
 }
 
 

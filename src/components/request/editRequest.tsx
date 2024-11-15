@@ -14,7 +14,6 @@ const EditRequest: React.FC<EditRequestProps> = ({ setEditRequestData, editReque
         const { name, value } = e.target;
         if(name === "user_id") {
             setBooks([])
-            console.log(value,"valuevalue")
             fetchBookAgainstReader(value)
         }
         setEditRequestData((prevData) => ({
@@ -33,14 +32,12 @@ const EditRequest: React.FC<EditRequestProps> = ({ setEditRequestData, editReque
     const fetchBookAgainstReader = async (readerId : number | string) => {
         try {
             const response = await getCall(endPoints?.getBooksAgainstUserLibrary, {id :readerId});
-                console.log(response,"after user edit selected")
                 if(response?.length ==0){
                     toast.info("No books found against this reader");
                     if(editRequestData.book_id ){
                         console.log(editRequestData.book_id ,"editRequestData.book_id = ")
                         // setEditRequestData({book_id :'', user_id:editRequestData.user_id, returned_date:editRequestData.returned_date, status:editRequestData.status})
                     }
-                    
                     return
                 }
                 setBooks(response)
