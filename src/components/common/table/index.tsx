@@ -21,7 +21,9 @@ const Table = ({ header, data, placeholder, handleDeleteRecord, handelEditRecord
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const toggleAccordion = (rowIndex) => {
-    setExpandedRow((prev) => prev === rowIndex ? null : rowIndex);
+    if(role !== 'reader'){
+      setExpandedRow((prev) => prev === rowIndex ? null : rowIndex);
+    }
   };
 
   return (
@@ -83,25 +85,12 @@ const Table = ({ header, data, placeholder, handleDeleteRecord, handelEditRecord
 
               {expandedRow === rowIndex && (
                 <tr className="transition-all duration-300">
-                  <td colSpan={header.length} className="p-2 bg-secondary border border-primary transition-all duration-300">
+                  <td colSpan={header.length} className="p-2 bg-secondary border border-primary transition-all duration-300" >
                     <div className="transition-all duration-300">
                       {indexName==='library' && role==='super_admin'? (<BooksAgainstLibrary library={row}/>) : 
                       indexName==='book' && (role==='super_admin' || role==='librarian') ? (<FetchBooksWithReturnDate book={row}/>)  :
-                      <>
-                       <div>
-                       <span className="font-semibold text-gray-800">
-                         Details for {row[header[0]?.selector] || 'N/A'}
-                       </span>
-                     </div>
-                     <div className="mt-3 text-sm text-gray-600 flex">
-                       {header
-                         .filter((col) => col.selector !== 'action')
-                         .map((col, index) => (
-                           <p key={index}>
-                             <strong className='mr-1'>{col.name}:</strong> <span className='pr-5'> {row[col.selector] || 'N/A'}</span>
-                           </p>
-                         ))}
-                     </div> 
+                      < >
+                        <div className='!hidden'></div>
                      </>
                       } 
                     

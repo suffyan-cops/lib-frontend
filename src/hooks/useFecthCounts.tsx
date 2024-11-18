@@ -2,9 +2,11 @@ import { toast } from "react-toastify";
 import { endPoints } from "../services/constants/endPoints";
 import { getCall } from "../services/crudServices";
 import { useEffect, useState } from "react";
+import { getLocalStorageItem } from "../services/localStorageItem";
 
 
 export const useFetchCounts = () => {
+  const role= getLocalStorageItem('role');
     const [bookCount, setBookCount] = useState(0);
     const [libraryCount, setLibraryCount] = useState(0);
     const [memberCount, setMemberCount] = useState(0);
@@ -67,7 +69,10 @@ export const useFetchCounts = () => {
 
       fetchBookCount();
       fetchLibraryCount();
-      fetchMemberCount();
+      if(role!=='reader'){
+        fetchMemberCount();
+      }
+
       fetchIssuedBookCount();
       fetchAvailableBookCount();
       fetchLibCount();
