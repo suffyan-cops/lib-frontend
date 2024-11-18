@@ -21,7 +21,7 @@ const Table = ({ header, data, placeholder, handleDeleteRecord, handelEditRecord
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const toggleAccordion = (rowIndex) => {
-    if(role !== 'reader'){
+    if(role !== 'reader' && (indexName==='library' || indexName==='book') ){
       setExpandedRow((prev) => prev === rowIndex ? null : rowIndex);
     }
   };
@@ -56,7 +56,7 @@ const Table = ({ header, data, placeholder, handleDeleteRecord, handelEditRecord
                 {header.map((col, colIndex) => (
                   isRole === "reader" && col.selector === "action" ? null : (
                     <td key={colIndex} className="border border-primary !p-4" style={{ width: col.width || 'auto', whiteSpace: 'nowrap',  
-                      overflow: 'hidden', 
+                      overflow: 'hidden',
                       textOverflow: 'ellipsis', }}>
                       {col.selector === "action" ? (
                         <>
@@ -92,8 +92,7 @@ const Table = ({ header, data, placeholder, handleDeleteRecord, handelEditRecord
                       < >
                         <div className='!hidden'></div>
                      </>
-                      } 
-                    
+                      }
                     </div>
                   </td>
                 </tr>

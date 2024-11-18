@@ -2,8 +2,12 @@ import { toast } from "react-toastify";
 import { endPoints } from "../services/constants/endPoints";
 import { getCall } from "../services/crudServices";
 import { useEffect, useState } from "react";
+import { AxiosError } from "axios";
 
 
+interface ErrorResponse {
+  error: string;
+}
 
 
 export const useFetchLibraries = () => {
@@ -14,8 +18,11 @@ export const useFetchLibraries = () => {
         try {
           const response = await getCall(endPoints.fetchAllLibraries);
           setLibraries(response);
-        } catch (err) {
-          toast.error(`${err?.response?.data?.error || "Failed to fetch libraries"}`);
+        } catch (error) {
+          const err = error as AxiosError<ErrorResponse>;
+          const errorMessage =
+            err?.response?.data?.error || "Failed to fetch libraries";
+          toast.error(errorMessage);
         }
       };
 

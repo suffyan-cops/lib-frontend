@@ -4,7 +4,7 @@ import {eyeOff} from 'react-icons-kit/feather/eyeOff';
 import {eye} from 'react-icons-kit/feather/eye'
 import { AddMemberProps } from "./types";
 
-const LoginTextFields : React.FC<AddMemberProps> = ({setCredential,credential}) => {
+const LoginTextFields : React.FC<AddMemberProps> = ({setCredential,credential,  errors}) => {
     const [type, setType] = useState('password');
     const [icon, setIcon] = useState(eyeOff);
     const handleToggle = () => {
@@ -25,18 +25,39 @@ const LoginTextFields : React.FC<AddMemberProps> = ({setCredential,credential}) 
       };
     return (
         <>
-            <div>
-                <label className="text-sm  font-medium text-gray-500 ">Email Address</label>
-                <input type="text" name="email" placeholder="Enter Email" value={credential.email} onChange={handleChange} className="w-full p-2 !border !border-primary outline-none focus:!border-primary mb-5" />
-                <label className="text-sm  font-medium text-gray-500 ">Password</label>
-                <div className=" flex ">
-                    <input type={type} placeholder="Enter Password" name="password" value={credential.password} onChange={handleChange}  className="w-full p-2 !border !border-primary outline-none focus:!border-primary " />
-                    <span className="flex justify-end cursor-pointer" onClick={handleToggle}>
-                        <Icon className="absolute mt-2 mr-3 " icon={icon} size={20} />
-                    </span>
-                </div>
+        <div>
+    <label className="text-sm font-medium text-gray-500">Email Address</label>
+    <input
+        type="text"
+        name="email"
+        placeholder="Enter Email"
+        value={credential.email}
+        onChange={handleChange}
+        className="w-full p-2 !border !border-primary outline-none focus:!border-primary mb-1"
+    />
+    <div className="h-[20px] mb-2">
+        {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+    </div>
 
-            </div>
+    <label className="text-sm font-medium text-gray-500">Password</label>
+    <div className="flex relative">
+        <input
+            type={type}
+            placeholder="Enter Password"
+            name="password"
+            value={credential.password}
+            onChange={handleChange}
+            className="w-full p-2 !border !border-primary outline-none focus:!border-primary"
+        />
+        <span className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer" onClick={handleToggle}>
+            <Icon icon={icon} size={20} />
+        </span>
+    </div>
+    <div className="h-[20px] mb-2">
+        {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+    </div>
+</div>
+
         </>
     )
 }

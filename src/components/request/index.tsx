@@ -28,7 +28,7 @@ const RequestList = ()=>{
         status: "",
         return_date:""
     });
-    const headers = [{ name:"Request Id", selector:"id"}, {name:"Book Name" , selector:"book_name"}, {name:"Reader Name" , selector:"user_name" }, {name:"Status" , selector:"status"},{name: "Actions" , selector:"action"}];
+    const headers = [{ name:"Request Id", selector:"id"}, {name:"Book Name" , selector:"book_name"}, {name:"Reader Name" , selector:"user_name" }, {name:"Status" , selector:"status"}, {name:"Returned Date" , selector:"returned_date"}, {name: "Actions" , selector:"action"}];
     const modalValue = useSelector((state: any) => state.modal.isOPenModal);
 
     useEffect(() => {
@@ -48,6 +48,10 @@ const RequestList = ()=>{
     const handleKeyPress = async (event) => {
 
         if (event.key === 'Enter') {  
+            // if(!searchValue){
+            //     toast.info("Please enter a search value");
+            //     return
+            // }
             try {
                 const response = await getCall(endPoints.searchRequestByStatus, {searchValue : searchValue});
                 if(response?.length > 0)
