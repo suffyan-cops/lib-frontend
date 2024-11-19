@@ -30,6 +30,14 @@ const BookList = () => {
         library_id: ""
     });
 
+    const [errors, setErrors] = useState({
+        title: "",
+        description: "",
+        publication_year: "",
+        quantity: "",
+        library_id: ""
+    }); 
+
     useEffect(() => {
         fetchBooks();
     }, [])
@@ -78,6 +86,61 @@ const BookList = () => {
         }
     }
 
+    const validateField = () => {
+        let valid = true;
+        const newErrors = { title: "", description: "", publication_year: "", quantity:'', library_id:'' };
+        if(!editBookRecord){
+            if (!addBookData.title ) {
+                newErrors.title = "Please enter a valid title .";
+                valid = false;
+            }
+    
+            if (!addBookData.description) {
+                newErrors.description = "Please enter a valid description.";
+                valid = false;
+            }
+            if (!addBookData.publication_year ) {
+                newErrors.publication_year = "Please enter a valid publication_year";
+                valid = false;
+            }
+            if (!addBookData.quantity ) {
+                newErrors.quantity = "Please enter a valid quantity";
+                valid = false;
+            }
+            if (!addBookData.library_id ) {
+                newErrors.library_id = "Library must be selected";
+                valid = false;
+            }
+        }
+        else{
+            if (!editBookData.title ) {
+                newErrors.title = "Please enter a valid title .";
+                valid = false;
+            }
+    
+            if (!editBookData.description) {
+                newErrors.description = "Please enter a valid description.";
+                valid = false;
+            }
+            if (!editBookData.publication_year ) {
+                newErrors.publication_year = "Please enter a valid publication_year";
+                valid = false;
+            }
+            if (!editBookData.quantity ) {
+                newErrors.quantity = "Please enter a valid quantity";
+                valid = false;
+            }
+            if (!editBookData.library_id ) {
+                newErrors.library_id = "Library must be selected";
+                valid = false;
+            }
+        }
+   
+
+        setErrors(newErrors);
+        return valid;
+    };
+
     const handelEditRecord = (book) => {
         setEditBookData(book);
         dispatch(changeModalState(true))
@@ -85,10 +148,7 @@ const BookList = () => {
     }
 
     const saveEditRecord = async () => {
-        if (!editBookData.title) {
-            toast.error("Please enter a valid Name.");
-            return;
-        }
+        if (!validateField()) return;
         try {
             const response = await putCall(endPoints.updateBook, editBookData);
             if (response.status === 200) {
@@ -125,19 +185,24 @@ const BookList = () => {
             quantity: "",
             library_id: ""
         })
+        setErrors({
+            title: "",
+            description: "",
+            publication_year: "",
+            quantity: "",
+            library_id: ""
+        })
         dispatch(changeModalState(false))
         setEditBookRecord(false)
     }
     const handleAddRecord = async () => {
-        if (!addBookData.title) {
-            toast.error("Please enter a valid Name.");
-            return;
-        }
         const userData = JSON.parse(getLocalStorageItem("userData"));
         if(role==="librarian" && addBookData.library_id === "")
         {
                 addBookData.library_id = userData?.library_id;
         }
+        if (!validateField()) return;
+     
         try {
             const result = await postCall(endPoints.addBook, addBookData);
             if (result.status === 200) {
@@ -173,7 +238,7 @@ const BookList = () => {
                 {
                     modalValue &&
                     <ModalComponent
-                        children={!editBookRecord ? <AddBooks setAddBookData={setAddBookData} addBookData={addBookData} /> : <EditBooks setEditBookData={setEditBookData} editBookData={editBookData} />}
+                        children={!editBookRecord ? <AddBooks setAddBookData={setAddBookData} addBookData={addBookData} errors={errors} /> : <EditBooks setEditBookData={setEditBookData} editBookData={editBookData} errors={errors} />}
                         onDelete={handleAddEditData}
                         onCancel={handleAddCancelModal}
                         btnText={!editBookRecord ? "Add Book" : "Edit Book"} />

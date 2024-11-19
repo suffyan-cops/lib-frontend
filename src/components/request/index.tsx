@@ -20,14 +20,20 @@ const RequestList = ()=>{
         book_id: "",
         user_id: "",
         status: "",
-        return_date:""
+        returned_date:""
     });
     const [addRequestRecord, setAddRequestRecord] = useState({
         book_id: "",
         user_id: "",
         status: "",
-        return_date:""
+        returned_date:""
     });
+    const [errors, setErrors] = useState({
+        book_id: "",
+        user_id: "",
+        status: "",
+        returned_date:""
+    }); 
     const headers = [{ name:"Request Id", selector:"id"}, {name:"Book Name" , selector:"book_name"}, {name:"Reader Name" , selector:"user_name" }, {name:"Status" , selector:"status"}, {name:"Returned Date" , selector:"returned_date"}, {name: "Actions" , selector:"action"}];
     const modalValue = useSelector((state: any) => state.modal.isOPenModal);
 
@@ -44,6 +50,56 @@ const RequestList = ()=>{
             toast.error(`${error?.response?.data?.error || "Failed to fetch requests"}`)
         }
     }
+
+    const validateField = () => {
+        let valid = true;
+        const newErrors = {    book_id: "",
+            user_id: "",
+            status: "",
+            returned_date:"" };
+        if(!editRequestRecord){
+            if (!addRequestRecord.book_id ) {
+                newErrors.book_id = "Book Must be selected .";
+                valid = false;
+            }
+    
+            if (!addRequestRecord.user_id) {
+                newErrors.user_id = "User Must be selected.";
+                valid = false;
+            }
+            if (!addRequestRecord.status ) {
+                newErrors.status = "Status Must be selected";
+                valid = false;
+            }
+            if (!addRequestRecord.returned_date ) {
+                newErrors.returned_date = "Date Must be filled";
+                valid = false;
+            }
+        }
+        else{
+            if (!editRequestData.book_id ) {
+                newErrors.book_id = "Book Must be selected .";
+                valid = false;
+            }
+    
+            if (!editRequestData.user_id) {
+                newErrors.user_id = "User Must be selected.";
+                valid = false;
+            }
+            if (!editRequestData.status ) {
+                newErrors.status = "Status Must be selected";
+                valid = false;
+            }
+            if (!editRequestData.returned_date ) {
+                newErrors.returned_date = "Date Must be filled";
+                valid = false;
+            }
+        }
+    
+
+        setErrors(newErrors);
+        return valid;
+    };
 
     const handleKeyPress = async (event) => {
 
@@ -91,6 +147,7 @@ const RequestList = ()=>{
     }
 
     const saveEditRecord = async () => {
+        if(!validateField())return
         try {
             const response = await putCall(endPoints.updateRequest, editRequestData);
             if (response.status === 200) {
@@ -100,7 +157,7 @@ const RequestList = ()=>{
                     book_id: "",
                     user_id: "",
                     status: "",
-                    return_date:""
+                    returned_date:""
                 })
                 dispatch(changeModalState(false))
                 fetchRequests();
@@ -127,13 +184,19 @@ const RequestList = ()=>{
             book_id: "",
             user_id: "",
             status: "",
-            return_date:""
+            returned_date:""
         })
         setEditRequestData({
             book_id: "",
             user_id: "",
             status: "",
-            return_date:""
+            returned_date:""
+        })
+        setErrors({
+            book_id: "",
+            user_id: "",
+            status: "",
+            returned_date:""
         })
         setEditRequestRecord(false)
     }
@@ -144,10 +207,7 @@ const RequestList = ()=>{
         {
             addRequestRecord.user_id = userData?.id;
         }
-            if (!addRequestRecord) {
-                toast.error("All fields are required");
-                return;
-            }
+        if(!validateField())return
         try {
             const result = await postCall(endPoints.addRequest,addRequestRecord);
             if (result.status === 200) {
@@ -156,7 +216,7 @@ const RequestList = ()=>{
                     book_id: "",
                     user_id: "",
                     status: "",
-                    return_date:""
+                    returned_date:""
                 })
                 dispatch(changeModalState(false))
                 fetchRequests();
@@ -182,7 +242,7 @@ const RequestList = ()=>{
             {
                 modalValue &&
                 <ModalComponent
-                    children={ !editRequestRecord ? <AddRequest setAddRequestRecord={setAddRequestRecord}  addRequestRecord={addRequestRecord} /> : <EditRequest setEditRequestData={setEditRequestData} editRequestData={editRequestData} />}
+                    children={ !editRequestRecord ? <AddRequest setAddRequestRecord={setAddRequestRecord}  addRequestRecord={addRequestRecord} errors={errors} /> : <EditRequest setEditRequestData={setEditRequestData} editRequestData={editRequestData} errors={errors}/>}
                     onDelete={handleAddEditData}
                     onCancel={handleAddCancelModal}
                     btnText={!editRequestRecord ? "Add Request" : "Edit Request"}/>

@@ -8,7 +8,7 @@ import { getLocalStorageItem } from "../../services/localStorageItem";
 
 const statuses = [{id:1 ,title:'Completed'}, {id:2, title:'Submitted'}, { id:3, title: 'Rejected'}]
 
-const AddRequest : React.FC<AddRequestProps> = ({setAddRequestRecord,addRequestRecord}) => {
+const AddRequest : React.FC<AddRequestProps> = ({setAddRequestRecord,addRequestRecord, errors}) => {
     const role =getLocalStorageItem("role")
     const userData = JSON.parse(getLocalStorageItem("userData"));
     const [books, setBooks] = useState([])
@@ -48,7 +48,7 @@ const AddRequest : React.FC<AddRequestProps> = ({setAddRequestRecord,addRequestR
         <>
         {/* // THsis is uncontrollerd component becasue it cab not handle by formData. This is a simple form example */}
             <h1 className="mb-10 text-center text-3xl font-bold text-primary"> Add Request</h1>
-            <div>
+            <div className="w-[400px]">
                 <select name="user_id" value={userData?.id !='' && role==='reader' ? userData?.id :null }  onChange={handleChange} disabled={role==="reader"}  className="w-full p-2 !border !border-primary outline-none focus:!border-primary mt-4" >
                     <option value="" selected disabled>Select  Reader</option>
                     {readers?.map((reader) => (
@@ -57,6 +57,7 @@ const AddRequest : React.FC<AddRequestProps> = ({setAddRequestRecord,addRequestR
                         </option>
                     ))}
                 </select>
+                {errors.user_id && <p className="text-red-500 text-sm mt-1">{errors.user_id}</p>}
                 <select name="book_id" value={addRequestRecord.book_id}   onChange={handleChange}  className="w-full p-2 !border !border-primary outline-none focus:!border-primary mt-10" >
                     <option value="" selected disabled>Select Book</option>
                     { books?.length >0 ? books?.map((book) => (
@@ -65,7 +66,9 @@ const AddRequest : React.FC<AddRequestProps> = ({setAddRequestRecord,addRequestR
                         </option>
                     )) : <option value="" selected disabled>No Book Found</option>}
                 </select>
+                {errors.book_id && <p className="text-red-500 text-sm mt-1">{errors.book_id}</p>}
                 <input name="returned_date" value={addRequestRecord.returned_date}  type="date" onChange={handleChange} className="w-full p-2 !border !border-primary outline-none focus:!border-primary mt-10"/>
+                {errors.returned_date && <p className="text-red-500 text-sm mt-1">{errors.returned_date}</p>}
                 <select name="status" value={addRequestRecord.status}   onChange={handleChange}  className="w-full p-2 !border !border-primary outline-none focus:!border-primary mt-10" >
                     <option value="" selected disabled>Select Status</option>
                     { statuses?.length >0 ? statuses?.map((status) => (
@@ -74,6 +77,7 @@ const AddRequest : React.FC<AddRequestProps> = ({setAddRequestRecord,addRequestR
                         </option>
                     )) : <option value="" selected disabled>No Book Found</option>}
                 </select>
+                {errors.status && <p className="text-red-500 text-sm mt-1">{errors.status}</p>}
             </div>
         </>
     )

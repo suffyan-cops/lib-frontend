@@ -32,6 +32,13 @@ const LibraryList = () => {
         email: "",
         website: ""
     });
+    const [errors, setErrors] = useState({
+        name: "",
+        phone_number: "",
+        address: "",
+        email: "",
+        website: ""
+    }); 
     const modalValue = useSelector((state: any) => state.modal.isOPenModal);
 
     useEffect(() => {
@@ -47,6 +54,65 @@ const LibraryList = () => {
             toast.error(`${error?.response?.data?.error || "Failed to fetch libraries"}`)
         }
     }
+
+    const validateField = () => {
+        let valid = true;
+        const newErrors = {  name: "",
+            phone_number: "",
+            address: "",
+            email: "",
+            website: "" };
+        if(!editLibraryRecord){
+            if (!addLibraryData.name ) {
+                newErrors.name = "Please enter a valid name .";
+                valid = false;
+            }
+    
+            if (!addLibraryData.phone_number) {
+                newErrors.phone_number = "Phone Must be filled.";
+                valid = false;
+            }
+            if (!addLibraryData.address ) {
+                newErrors.address = "Address Must be filled";
+                valid = false;
+            }
+            if (!addLibraryData.email ) {
+                newErrors.email = "Email Must be filled";
+                valid = false;
+            }
+            if (!addLibraryData.website ) {
+                newErrors.website = "Website must be filled";
+                valid = false;
+            }
+        }
+        else{
+            if (!editLibraryData.name ) {
+                newErrors.name = "Please enter a valid name .";
+                valid = false;
+            }
+    
+            if (!editLibraryData.phone_number) {
+                newErrors.phone_number = "Phone Must be filled.";
+                valid = false;
+            }
+            if (!editLibraryData.address ) {
+                newErrors.address = "Address Must be filled";
+                valid = false;
+            }
+            if (!editLibraryData.email ) {
+                newErrors.email = "Email Must be filled";
+                valid = false;
+            }
+            if (!editLibraryData.website ) {
+                newErrors.website = "Website must be filled";
+                valid = false;
+            }
+        }
+    
+
+        setErrors(newErrors);
+        return valid;
+    };
 
     const handleKeyPress = async (event) => {
         if (event.key === 'Enter') {  
@@ -101,6 +167,13 @@ const LibraryList = () => {
             email: "",
             website: ""
         })
+        setErrors({
+            name: "",
+            phone_number: "",
+            address: "",
+            email: "",
+            website: ""
+        })
         dispatch(changeModalState(false))
         setEditLibraryRecord(false)
     }
@@ -108,10 +181,7 @@ const LibraryList = () => {
     const handleAddEditData = async () =>{
         
         if(editLibraryRecord) {
-            if (!editLibraryData.name) {
-                toast.error("Please enter a valid Name.");
-                return;
-            }
+            if (!validateField())return;
             try {
                 const response = await putCall(endPoints.updateLibrary, editLibraryData);
                 if (response.status === 200) {
@@ -128,10 +198,7 @@ const LibraryList = () => {
         }
         else {
             try {
-                if (!addLibraryData.name) {
-                    toast.error("Please enter a valid Name.");
-                    return;
-                }
+                if (!validateField())return;
                 const response = await postCall(endPoints.addLibrary, addLibraryData);
                 if (response.status === 200) {
                     toast.success(`${response?.data?.message}`);
@@ -161,7 +228,7 @@ const LibraryList = () => {
                 {
                     modalValue &&
                     <ModalComponent
-                        children={ !editLibraryRecord ? <AddLibrary setAddLibraryData={setAddLibraryData} addLibraryData={addLibraryData} /> : <EditLibrary setEditLibraryData={setEditLibraryData} editLibraryData={editLibraryData} />}
+                        children={ !editLibraryRecord ? <AddLibrary setAddLibraryData={setAddLibraryData} addLibraryData={addLibraryData} errors={errors} /> : <EditLibrary setEditLibraryData={setEditLibraryData} editLibraryData={editLibraryData} errors={errors} />}
                         onDelete={handleAddEditData}
                         onCancel={handleAddCancelModal}
                         btnText= { !editLibraryRecord ? "Add Library"  :"Edit Library"}/>

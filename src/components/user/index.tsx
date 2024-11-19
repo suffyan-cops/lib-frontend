@@ -30,6 +30,13 @@ const UserList = () => {
         password: ""
     });
 
+    const [errors, setErrors] = useState({
+        name: "",
+        email: "",
+        password: "",
+        role: "",
+        library_id: ""
+    }); 
 
     useEffect(() => {
         fetchUsers();
@@ -44,6 +51,63 @@ const UserList = () => {
             toast.error(`${error?.response?.data?.error || "Failed to fetch libraries"}`)
         }
     }
+
+    const validateField = () => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        let valid = true;
+        const newErrors = { email: "", password: "", name: "", role:'', library_id:'' };
+
+        if (!addUserRecord.email || !emailRegex.test(addUserRecord.email)) {
+            newErrors.email = "Please enter a valid email address.";
+            valid = false;
+        }
+        if (!addUserRecord.password || addUserRecord.password.length < 6) {
+            newErrors.password = "Password must be at least 8 characters long.";
+            valid = false;
+        }
+
+        if (!addUserRecord.name) {
+            newErrors.name = "Please enter a valid name.";
+            valid = false;
+        }
+        if (!addUserRecord.role ) {
+            newErrors.role = "Role must be selected";
+            valid = false;
+        }
+        if (!addUserRecord.library_id ) {
+            newErrors.library_id = "Library must be selected";
+            valid = false;
+        }
+
+        setErrors(newErrors);
+        return valid;
+    };
+    const validateFieldForEdit = () => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        let valid = true;
+        const newErrors = { email: "", password: "", name: "", role:'', library_id:'' };
+
+        if (!editUserData.email || !emailRegex.test(editUserData.email)) {
+            newErrors.email = "Please enter a valid email address.";
+            valid = false;
+        }
+
+        if (!editUserData.name) {
+            newErrors.name = "Please enter a valid name.";
+            valid = false;
+        }
+        if (!editUserData.role ) {
+            newErrors.role = "Role must be selected";
+            valid = false;
+        }
+        if (!editUserData.library_id ) {
+            newErrors.library_id = "Library must be selected";
+            valid = false;
+        }
+
+        setErrors(newErrors);
+        return valid;
+    };
 
     const handleKeyPress = async (event) => {
         if (event.key === 'Enter') {
@@ -86,10 +150,7 @@ const UserList = () => {
     }
 
     const saveEditRecord = async () => {
-        if (!editUserData.name) {
-            toast.error("Please enter a valid Name.");
-            return;
-        }
+        if(!validateFieldForEdit())return
         const intRole = Number(editUserData.role_value);
         try {
             const response = await putCall(endPoints.updateUser, {
@@ -151,10 +212,7 @@ const UserList = () => {
     }
 
     const handleAddRecord = async () => {
-        if (!addUserRecord.name) {
-            toast.error("Please enter a valid Name.");
-            return;
-        }
+        if(!validateField())return
         const intRole = Number(addUserRecord.role);
         try {
             const result = await postCall(endPoints.addUser, {
@@ -199,7 +257,7 @@ const UserList = () => {
                 {
                     modalValue &&
                     <ModalComponent
-                        children={!editUserRecord ? <AddUser setAddUserRecord={setAddUserRecord} addUserRecord={addUserRecord} /> : <EditUser setEditUserData={setEditUserData} editUserData={editUserData} />}
+                        children={!editUserRecord ? <AddUser setAddUserRecord={setAddUserRecord} addUserRecord={addUserRecord} errors={errors}/> : <EditUser setEditUserData={setEditUserData} editUserData={editUserData} errors={errors}/>}
                         onDelete={handleAddEditData}
                         onCancel={handleAddCancelModal}
                         btnText={!editUserRecord ? "Add User" : "Edit User"} />
